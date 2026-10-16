@@ -20,12 +20,16 @@ public class MatchesController : Controller
         _teamService = teamService;
     }
 
-    // GET /Matches            -> all matches 
-    // GET /Matches?status=Scheduled -> filtered board 
-    public async Task<IActionResult> Index(MatchStatus? status)
+    // GET /Matches                      -> all matches 
+    // GET /Matches?status=Scheduled     -> filtered board 
+    // GET /Matches?search=nacional      -> searched board
+    // GET /Matches?status=Scheduled&search=nacional -> combined filter
+    public async Task<IActionResult> Index(MatchStatus? status, string? search)
     {
         ViewBag.CurrentStatus = status;
-        var board = await _matchService.GetBoardAsync(status);
+        ViewBag.CurrentSearch = search;
+
+        var board = await _matchService.GetBoardAsync(status, search);
         return View(board);
     }
 
